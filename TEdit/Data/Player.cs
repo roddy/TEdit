@@ -98,6 +98,14 @@ namespace TEdit.Data
         /// </summary>
         public Color ShoeColor { get; set; }
 
+        public Item[] Armor { get; set; }
+
         #endregion
+
+        public Player()
+        {
+            Name = "John Q. Public";
+            Difficulty = (byte)2;
+        }
     }
 }
