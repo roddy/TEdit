@@ -13,6 +13,12 @@ namespace TEdit.Data
         #region Properties
 
         /// <summary>
+        /// The release version for the given PLR file. This is important because certain features weren't added
+        /// until certain releases, so the underlying file structure changed.
+        /// </summary>
+        public Int32 Release { get; set; }
+
+        /// <summary>
         /// The player's name.
         /// </summary>
         public String Name { get; set; }
