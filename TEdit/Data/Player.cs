@@ -52,22 +52,22 @@ namespace TEdit.Data
         /// <summary>
         /// Player's current hit points.
         /// </summary>
-        public int currentLife { get; set; }
+        public int CurrentLife { get; set; }
 
         /// <summary>
         /// Player's maximum hit points.
         /// </summary>
-        public int maxLife { get; set; }
+        public int MaxLife { get; set; }
 
         /// <summary>
         /// Player's current mana.
         /// </summary>
-        public int currentMana { get; set; }
+        public int CurrentMana { get; set; }
 
         /// <summary>
         /// Player's maximum mana.
         /// </summary>
-        public int maxMana { get; set; }
+        public int MaxMana { get; set; }
 
         /// <summary>
         /// Player's (natural, un-dyed) hair color.
