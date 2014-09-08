@@ -14,40 +14,40 @@ namespace TEdit.Data.Util
         /// Minimum supported release for this tool. This happens to be the release that introduced lookup-by-ID over
         /// lookup-by-name. Coincidence? Nope.
         /// </summary>
-        public static const int MIN_SUPPORTED_RELEASE = 38;
+        public const int MIN_SUPPORTED_RELEASE = 38;
 
         /// <summary>
         /// Apparently there's a hard-limit for the maximum number of worlds (which we found by looking at the size
         /// of the array of default spawn points in the Players class.) In this partcular version, the max is 200. We've
         /// exposed it here just in case it changes sometime in the future.
         /// </summary>
-        public static const int MAX_WORLDS = 200;
+        public static readonly int MAX_WORLDS = 200;
 
-        private static const int MIN_RELEASE_HAIR_DYE = 82;
-        private static const int MIN_RELEASE_HIDE_VISUAL = 83;
+        private static readonly int MIN_RELEASE_HAIR_DYE = 82;
+        private static readonly int MIN_RELEASE_HIDE_VISUAL = 83;
 
-        private static const int MIN_RELEASE_16_ITEM_ARMOR = 81;
+        private static readonly int MIN_RELEASE_16_ITEM_ARMOR = 81;
 
-        private static const int MIN_RELEASE_DYE = 47;
-        private static const int MIN_RELEASE_EXTENDED_DYE = 81;
+        private static readonly int MIN_RELEASE_DYE = 47;
+        private static readonly int MIN_RELEASE_EXTENDED_DYE = 81;
 
-        private static const int MIN_RELEASE_EXTENDED_INVENTORY = 58;
-        private static const int INVENTORY_SIZE_ORIGINAL = 48;
-        private static const int INVENTORY_SIZE_EXTENDED = 58;
+        private static readonly int MIN_RELEASE_EXTENDED_INVENTORY = 58;
+        private static readonly int INVENTORY_SIZE_ORIGINAL = 48;
+        private static readonly int INVENTORY_SIZE_EXTENDED = 58;
 
-        private static const int MIN_RELEASE_EXTENDED_BANK = 58;
-        private static const int BANK_SIZE = 40;
+        private static readonly int MIN_RELEASE_EXTENDED_BANK = 58;
+        private static readonly int BANK_SIZE = 40;
 
-        private static const int MIN_RELEASE_ANGLER = 98;
+        private static readonly int MIN_RELEASE_ANGLER = 98;
 
-        private static const int BUFF_INCREASE_RELEASE = 75;
-        private static const int BUFF_COUNT_ORIGINAL = 10;
-        private static const int BUFF_COUNT_EXTENDED = 22;
+        private static readonly int BUFF_INCREASE_RELEASE = 75;
+        private static readonly int BUFF_COUNT_ORIGINAL = 10;
+        private static readonly int BUFF_COUNT_EXTENDED = 22;
 
         /// <summary>
         /// The magic number to end all magic numbers.
         /// </summary>
-        public static const int MAX_ITEM_ID = 2749;
+        public static readonly int MAX_ITEM_ID = 2749;
 
         #endregion
 

@@ -10,7 +10,7 @@ namespace TEdit.Data.IO
 {
     class PlrReader
     {
-        private static const String KEY = "h3y_gUyZ";
+        private static readonly String KEY = "h3y_gUyZ";
 
         public static Player Load(String filepath)
         {
