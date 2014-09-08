@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using TEdit.Data.Types;
+using TEdit.Data.Util;
 
 namespace TEdit.Data
 {
@@ -105,6 +106,21 @@ namespace TEdit.Data
         public Color ShoeColor { get; set; }
 
         public Item[] Armor { get; set; }
+        public Item[] Dyes { get; set; }
+        public Item[] Inventory { get; set; }
+        public Item[] Bank1 { get; set; }
+        public Item[] Bank2 { get; set; }
+
+        public Boolean HotBarLocked { get; set; }
+        public Buff[] Buffs { get; set; }
+
+        // spawn data -- apparently there's a limit of 200 worlds. who knew?
+        public int[] SpawnX { get; private set; }
+        public int[] SpawnY { get; private set; }
+        public string[] SpawnWorldName { get; private set; }
+        public int[] SpawnWorldId { get; private set; }
+
+        public Int32 AnglerQuests { get; set; }
 
         #endregion
 
@@ -112,6 +128,13 @@ namespace TEdit.Data
         {
             Name = "John Q. Public";
             Difficulty = (byte)2;
+
+            // initialize spawn data arrays
+            int size = VersionUtils.MAX_WORLDS;
+            SpawnX = new int[size];
+            SpawnY = new int[size];
+            SpawnWorldName = new string[size];
+            SpawnWorldId = new int[size];
         }
     }
 }
