@@ -47,12 +47,13 @@ namespace TEdit.Data.IO
             ParseDye(player, reader);
             ParseInventory(player, reader);
             ParseBank(player, reader);
-
-            ParseSpawnPoints(player, reader);
-
+            
             // we don't care about these for TEdit purposes, but if we don't parse them we don't be able to 
             // write a good output file at the end of the day
             ParseBuffs(player, reader);
+
+            ParseSpawnPoints(player, reader);
+
             ParseHotBarLocked(player, reader);
 
             // We do kinda care about this one.
