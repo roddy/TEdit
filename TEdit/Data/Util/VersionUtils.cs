@@ -11,6 +11,11 @@ namespace TEdit.Data.Util
         #region Properties
 
         /// <summary>
+        /// The current terraria release. This is used for saving files.
+        /// </summary>
+        public const int TERRARIA_CURRENT_RELEASE = 102;
+
+        /// <summary>
         /// Minimum supported release for this tool. This happens to be the release that introduced lookup-by-ID over
         /// lookup-by-name. Coincidence? Nope.
         /// </summary>
@@ -30,6 +35,8 @@ namespace TEdit.Data.Util
 
         private static readonly int MIN_RELEASE_DYE = 47;
         private static readonly int MIN_RELEASE_EXTENDED_DYE = 81;
+        private static readonly int INITIAL_DYE_SIZE = 3;
+        private static readonly int EXTENDED_DYE_SIZE = 8;
 
         private static readonly int MIN_RELEASE_EXTENDED_INVENTORY = 58;
         private static readonly int INVENTORY_SIZE_ORIGINAL = 48;
@@ -74,6 +81,22 @@ namespace TEdit.Data.Util
         public static bool IsExtendedDyeSupported(int release)
         {
             return release >= MIN_RELEASE_EXTENDED_DYE;
+        }
+
+        public static int GetDyeSize(int release)
+        {
+            if (!IsDyeSupported(release))
+            {
+                return 0;
+            }
+            else if (IsExtendedBankSizeSupported(release))
+            {
+                return EXTENDED_DYE_SIZE;
+            }
+            else
+            {
+                return INITIAL_DYE_SIZE;
+            }
         }
 
         public static bool IsExtendedInventorySupported(int release)
