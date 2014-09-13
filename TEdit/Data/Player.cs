@@ -123,14 +123,20 @@ namespace TEdit.Data
         [DefaultValue(typeof(Color), "Black")]
         public Color ShoeColor { get; set; }
 
-        [DefaultValue(new Object[0])]
-        public Item[] Armor { get; set; }
+        /// <summary>
+        /// Array of Items that are located in the Player's armor slots.
+        /// </summary>
+        public Item[] Armor { get; private set; }
 
-        [DefaultValue(new Object[0])]
-        public Item[] Dyes { get; set; }
+        /// <summary>
+        /// Array of Items are that located in the Player's dye slots.
+        /// </summary>
+        public Item[] Dyes { get; private set; }
 
-        [DefaultValue(new Object[0])]
-        public Item[] Inventory { get; set; }
+        /// <summary>
+        /// Array if items that are located in the Player's inventory
+        /// </summary>
+        public Item[] Inventory { get; private set; }
 
         [DefaultValue(new Object[0])]
         public Item[] Bank1 { get; set; }
@@ -157,6 +163,12 @@ namespace TEdit.Data
 
         public Player()
         {
+            // initialize item and buff arrays
+            int release = VersionUtils.TERRARIA_CURRENT_RELEASE;
+            Armor = new Item[VersionUtils.GetArmorSize(release)];
+            Dyes = new Item[VersionUtils.GetDyeSize(release)];
+            Inventory = new Item[VersionUtils.GetInventorySize(release)];
+
             // initialize spawn data arrays
             int size = VersionUtils.MAX_WORLDS;
             SpawnX = new int[size];

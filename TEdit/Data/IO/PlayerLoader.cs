@@ -169,8 +169,8 @@ namespace TEdit.Data.IO
         private static void ParseInventory(Player player, BinaryReader reader)
         {
             int size = VersionUtils.GetInventorySize(player.Release);
-            Item[] inventory = new Item[size];
-            for (int index = 0; index < inventory.Length; index++)
+            int index = 0;
+            for (; index < size && index < player.Inventory.Length; index++)
             {
                 int id = reader.ReadInt32();
                 Item item = new Item();
@@ -180,17 +180,16 @@ namespace TEdit.Data.IO
                     item.StackSize = reader.ReadInt32();
                     item.Prefix = (int)reader.ReadByte();
                 }
-                inventory[index] = item;
-                
+                player.Inventory[index] = item;
             }
-            player.Inventory = inventory;
+            for (; index < player.Inventory.Length; index++)
+            {
+                player.Inventory[index] = new Item();
+            }
         }
 
         private static void ParseDye(Player player, BinaryReader reader)
         {
-            int currentDyes = VersionUtils.GetDyeSize(VersionUtils.TERRARIA_CURRENT_RELEASE);
-            Item[] dyes = new Item[currentDyes];
-
             int release = player.Release;
             if (VersionUtils.IsDyeSupported(release))
             {
@@ -200,26 +199,25 @@ namespace TEdit.Data.IO
                 for (; index < releaseDyes; index++)
                 {
                     Item dye = ParseDye(reader);
-                    dyes[index] = dye;
+                    player.Dyes[index] = dye;
                     if (logger.IsDebugEnabled)
                     {
                         logger.Debug("Parsed dye: " + dye);
                     }
                 }
-                for (; index < currentDyes; index++)
+                for (; index < player.Dyes.Length; index++)
                 {
-                    dyes[index] = new Item();
+                    player.Dyes[index] = new Item();
                 }
             }
             else if (logger.IsDebugEnabled)
             {
-                for (int index = 0; index < dyes.Length; index++)
+                for (int index = 0; index < player.Dyes.Length; index++)
                 {
-                    dyes[index] = new Item();
+                    player.Dyes[index] = new Item();
                 }
                 logger.Debug("Did not parse dyes because they are not enabled in release '" + release + "'.");
             }
-            player.Dyes = dyes;
         }
 
         /// <summary>
@@ -243,9 +241,8 @@ namespace TEdit.Data.IO
             {
                 size = 16;
             }
-            Item[] armor = new Item[size];
-
-            for (int index = 0; index < armor.Length; index++)
+            
+            for (int index = 0; index < size && index < player.Armor.Length; index++)
             {
                 Item item = new Item();
                 int id = reader.ReadInt32();
@@ -255,17 +252,20 @@ namespace TEdit.Data.IO
                     item.StackSize = 1;
                     item.Prefix = (int)reader.ReadByte();
                 }
-                armor[index] = item;
+                player.Armor[index] = item;
                 if (logger.IsDebugEnabled)
                 {
                     logger.Debug("Parsed item to Armor slot: " + item);
                 }
             }
+            for (int index = size; index < player.Armor.Length; index++)
+            {
+                player.Armor[index] = new Item();
+            }
 
-            player.Armor = armor;
             if (logger.IsDebugEnabled)
             {
-                logger.Debug("Parsed player's armor: " + armor.Length + " pieces.");
+                logger.Debug("Parsed player's armor: " + player.Armor.Length + " pieces.");
             }
         }
 

@@ -99,6 +99,18 @@ namespace TEdit.Data.Util
             }
         }
 
+        public static int GetArmorSize(int release)
+        {
+            if (VersionUtils.Is16PieceArmorSupported(release))
+            {
+                return 16;
+            }
+            else
+            {
+                return 11;
+            }
+        }
+
         public static bool IsExtendedInventorySupported(int release)
         {
             return release >= MIN_RELEASE_EXTENDED_INVENTORY;
