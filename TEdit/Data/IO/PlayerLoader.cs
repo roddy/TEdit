@@ -126,11 +126,15 @@ namespace TEdit.Data.IO
                 }
             }
 
-            Buff[] b = new Buff[buffs.Count];
+            Buff[] b = new Buff[num];
             int idx = 0;
             foreach (Buff buff in buffs) {
                 b[idx] = buff;
                 idx++;
+            }
+            for (; idx < num; idx++)
+            {
+                b[idx] = new Buff();
             }
             player.Buffs = b;
         }
@@ -184,34 +188,52 @@ namespace TEdit.Data.IO
 
         private static void ParseDye(Player player, BinaryReader reader)
         {
+            int currentDyes = VersionUtils.GetDyeSize(VersionUtils.TERRARIA_CURRENT_RELEASE);
+            Item[] dyes = new Item[currentDyes];
+
             int release = player.Release;
             if (VersionUtils.IsDyeSupported(release))
             {
-                int size = 3;
-                if (VersionUtils.IsExtendedDyeSupported(release))
-                {
-                    size = 8;
-                }
-                Item[] dyes = new Item[size];
+                int releaseDyes = VersionUtils.GetDyeSize(release);
 
-                for (int index = 0; index < dyes.Length; index++)
+                int index = 0;
+                for (; index < releaseDyes; index++)
                 {
-                    Item item = new Item();
-                    item.Id = reader.ReadInt32();
-                    item.StackSize = 1;
-                    item.Prefix = (int)reader.ReadByte();
-                    dyes[index] = item;
+                    Item dye = ParseDye(reader);
+                    dyes[index] = dye;
                     if (logger.IsDebugEnabled)
                     {
-                        logger.Debug("Parsed dye: " + item);
+                        logger.Debug("Parsed dye: " + dye);
                     }
                 }
-                player.Dyes = dyes;
+                for (; index < currentDyes; index++)
+                {
+                    dyes[index] = new Item();
+                }
             }
             else if (logger.IsDebugEnabled)
             {
+                for (int index = 0; index < dyes.Length; index++)
+                {
+                    dyes[index] = new Item();
+                }
                 logger.Debug("Did not parse dyes because they are not enabled in release '" + release + "'.");
             }
+            player.Dyes = dyes;
+        }
+
+        /// <summary>
+        /// Parse a single dye from the input stream
+        /// </summary>
+        /// <param name="reader">The input stream</param>
+        /// <returns>A single dye</returns>
+        private static Item ParseDye(BinaryReader reader)
+        {
+            Item item = new Item();
+            item.Id = reader.ReadInt32();
+            item.StackSize = 1;
+            item.Prefix = (int)reader.ReadByte();
+            return item;
         }
 
         private static void ParseArmor(Player player, BinaryReader reader)
