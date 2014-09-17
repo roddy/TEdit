@@ -138,11 +138,9 @@ namespace TEdit.Data
         /// </summary>
         public Item[] Inventory { get; private set; }
 
-        [DefaultValue(new Object[0])]
-        public Item[] Bank1 { get; set; }
+        public Item[] Bank1 { get; private set; }
 
-        [DefaultValue(new Object[0])]
-        public Item[] Bank2 { get; set; }
+        public Item[] Bank2 { get; private set; }
 
         [DefaultValue(false)]
         public Boolean HotBarLocked { get; set; }
@@ -168,6 +166,8 @@ namespace TEdit.Data
             Armor = new Item[VersionUtils.GetArmorSize(release)];
             Dyes = new Item[VersionUtils.GetDyeSize(release)];
             Inventory = new Item[VersionUtils.GetInventorySize(release)];
+            Bank1 = new Item[VersionUtils.GetBankSize(release)];
+            Bank2 = new Item[VersionUtils.GetBankSize(release)];
 
             // initialize spawn data arrays
             int size = VersionUtils.MAX_WORLDS;

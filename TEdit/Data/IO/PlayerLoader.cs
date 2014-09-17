@@ -150,20 +150,24 @@ namespace TEdit.Data.IO
         private static void ParseBank(Player player, BinaryReader reader)
         {
             int size = VersionUtils.GetBankSize(player.Release);
-            Item[] bank1 = new Item[size];
-            Item[] bank2 = new Item[size];
+            Item[] bank1 = player.Bank1;
+            Item[] bank2 = player.Bank2;
             Item[][] banks = {bank1, bank2};
             foreach (Item[] bank in banks) {
-                for (int index = 0; index < bank.Length; index++)
+                int index = 0;
+                for (; index < size; index++)
                 {
                     Item item = new Item();
                     item.Id = reader.ReadInt32();
                     item.StackSize = reader.ReadInt32();
                     item.Prefix = (int)reader.ReadByte();
+                    bank[index] = item;
+                }
+                for (; index < bank.Length; index++)
+                {
+                    bank[index] = new Item();
                 }
             }
-            player.Bank1 = bank1;
-            player.Bank2 = bank2;
         }
 
         private static void ParseInventory(Player player, BinaryReader reader)
