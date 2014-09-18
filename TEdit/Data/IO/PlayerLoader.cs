@@ -126,17 +126,15 @@ namespace TEdit.Data.IO
                 }
             }
 
-            Buff[] b = new Buff[num];
             int idx = 0;
-            foreach (Buff buff in buffs) {
-                b[idx] = buff;
-                idx++;
-            }
-            for (; idx < num; idx++)
+            for (; idx < num && idx < player.Buffs.Length && idx < buffs.Count; idx++)
             {
-                b[idx] = new Buff();
+                player.Buffs[idx] = buffs[idx];
             }
-            player.Buffs = b;
+            for (; idx < player.Buffs.Length; idx++)
+            {
+                player.Buffs[idx] = new Buff();
+            }
         }
 
         private static void checkReleaseSupport(int version)

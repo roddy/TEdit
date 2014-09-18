@@ -145,8 +145,7 @@ namespace TEdit.Data
         [DefaultValue(false)]
         public Boolean HotBarLocked { get; set; }
 
-        [DefaultValue(new Object[0])]
-        public Buff[] Buffs { get; set; }
+        public Buff[] Buffs { get; private set; }
 
         // spawn data -- apparently there's a limit of 200 worlds. who knew?
         public int[] SpawnX { get; private set; }
@@ -168,6 +167,7 @@ namespace TEdit.Data
             Inventory = new Item[VersionUtils.GetInventorySize(release)];
             Bank1 = new Item[VersionUtils.GetBankSize(release)];
             Bank2 = new Item[VersionUtils.GetBankSize(release)];
+            Buffs = new Buff[VersionUtils.GetBuffCount(release)];
 
             // initialize spawn data arrays
             int size = VersionUtils.MAX_WORLDS;
