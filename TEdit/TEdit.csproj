@@ -43,6 +43,10 @@
     <Reference Include="log4net">
       <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -82,7 +86,9 @@
     </Compile>
     <Compile Include="Data\Buff.cs" />
     <Compile Include="Data\IO\PlayerLoader.cs" />
+    <Compile Include="Data\IO\PlayerUnloader.cs" />
     <Compile Include="Data\IO\PlrReader.cs" />
+    <Compile Include="Data\IO\PlrWriter.cs" />
     <Compile Include="Data\Item.cs" />
     <Compile Include="Data\Player.cs" />
     <Compile Include="Data\Types\BitsByte.cs" />
