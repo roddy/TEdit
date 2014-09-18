@@ -50,20 +50,11 @@ namespace TEdit.Data.IO
             using (CryptoStream cryptoStream = new CryptoStream((Stream)input, rijndaelManaged.CreateDecryptor(bytes, bytes), CryptoStreamMode.Read))
             using (FileStream output = new FileStream(tempFile, FileMode.Create))
             {
-                try
+                int num;
+                while ((num = cryptoStream.ReadByte()) != -1)
                 {
-                    int num;
-                    while ((num = cryptoStream.ReadByte()) != -1)
-                    {
-                        output.WriteByte((byte)num);
-                    }
-                }
-                finally
-                {
-                    input.Close();
-                    cryptoStream.Close();
-                    output.Close();
-                }
+                    output.WriteByte((byte)num);
+                }                
             }
             return tempFile;
         }
