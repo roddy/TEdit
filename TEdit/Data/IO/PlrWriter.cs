@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TEdit.Data.IO
 {
-    class PlrWriter
+    public class PlrWriter
     {
         private static readonly String KEY = "h3y_gUyZ";
 
@@ -29,7 +29,7 @@ namespace TEdit.Data.IO
                 name = "Anonymous";
             }
             string tempFile = name + ".dat";
-            using(FileStream stream = new FileStream(tempFile, FileMode.Open))
+            using(FileStream stream = new FileStream(tempFile, FileMode.Create))
             using (BinaryWriter writer = new BinaryWriter(stream))
             {
                 try

@@ -25,7 +25,7 @@ namespace TEdit.Data.IO
             Player player = new Player();
 
             ParseRelease(player, reader);
-            checkReleaseSupport(player.Release);
+            CheckReleaseSupport(player.Release);
 
             ParseName(player, reader);
             ParseDifficulty(player, reader);
@@ -105,41 +105,29 @@ namespace TEdit.Data.IO
 
         private static void ParseBuffs(Player player, BinaryReader reader)
         {
-            int release = player.Release;
-            int num = VersionUtils.GetBuffCount(release);
-            List<Buff> buffs = new List<Buff>();
-            for (int index = 0; index < num; ++index)
+            int num = 22;
+            for (int i = 0; i < num; i++)
             {
                 Int32 type = reader.ReadInt32();
                 Int32 time = reader.ReadInt32(); //time
                 if (type == 0)
                 {
-                    --index;
+                    --i;
                     --num;
+
                 }
                 else
                 {
-                    Buff buff = new Buff();
-                    buff.Type = type;
-                    buff.Time = time;
-                    buffs.Add(buff);
+                    player.Buffs[i] = new Buff();
+                    player.Buffs[i].Time = time;
+                    player.Buffs[i].Type = type;
                 }
-            }
-
-            int idx = 0;
-            for (; idx < num && idx < player.Buffs.Length && idx < buffs.Count; idx++)
-            {
-                player.Buffs[idx] = buffs[idx];
-            }
-            for (; idx < player.Buffs.Length; idx++)
-            {
-                player.Buffs[idx] = new Buff();
             }
         }
 
-        private static void checkReleaseSupport(int version)
+        private static void CheckReleaseSupport(int version)
         {
-            if (version < VersionUtils.MIN_SUPPORTED_RELEASE)
+            if (version != VersionUtils.TERRARIA_CURRENT_RELEASE)
             {
                 throw new NotSupportedException("PLR file built with release '" + version + "', but the minimum supported release is '" + VersionUtils.MIN_SUPPORTED_RELEASE + "'. Please load the PLR to a terraria world and save it, then try opening it in TEdit again.");
             }
@@ -147,7 +135,7 @@ namespace TEdit.Data.IO
 
         private static void ParseBank(Player player, BinaryReader reader)
         {
-            int size = VersionUtils.GetBankSize(player.Release);
+            int size = 40;
             Item[] bank1 = player.Bank1;
             Item[] bank2 = player.Bank2;
             Item[][] banks = {bank1, bank2};
@@ -158,21 +146,16 @@ namespace TEdit.Data.IO
                     Item item = new Item();
                     item.Id = reader.ReadInt32();
                     item.StackSize = reader.ReadInt32();
-                    item.Prefix = (int)reader.ReadByte();
+                    item.Prefix = reader.ReadByte();
                     bank[index] = item;
-                }
-                for (; index < bank.Length; index++)
-                {
-                    bank[index] = new Item();
                 }
             }
         }
 
         private static void ParseInventory(Player player, BinaryReader reader)
         {
-            int size = VersionUtils.GetInventorySize(player.Release);
-            int index = 0;
-            for (; index < size && index < player.Inventory.Length; index++)
+            int size = 58;
+            for (int index = 0; index < size; index++)
             {
                 int id = reader.ReadInt32();
                 Item item = new Item();
@@ -180,45 +163,22 @@ namespace TEdit.Data.IO
                 {
                     item.Id = id;
                     item.StackSize = reader.ReadInt32();
-                    item.Prefix = (int)reader.ReadByte();
+                    item.Prefix = reader.ReadByte();
                 }
                 player.Inventory[index] = item;
-            }
-            for (; index < player.Inventory.Length; index++)
-            {
-                player.Inventory[index] = new Item();
             }
         }
 
         private static void ParseDye(Player player, BinaryReader reader)
         {
-            int release = player.Release;
-            if (VersionUtils.IsDyeSupported(release))
+            for (int index = 0; index < 8; index++)
             {
-                int releaseDyes = VersionUtils.GetDyeSize(release);
-
-                int index = 0;
-                for (; index < releaseDyes; index++)
+                Item dye = ParseDye(reader);
+                player.Dyes[index] = dye;
+                if (logger.IsDebugEnabled)
                 {
-                    Item dye = ParseDye(reader);
-                    player.Dyes[index] = dye;
-                    if (logger.IsDebugEnabled)
-                    {
-                        logger.Debug("Parsed dye: " + dye);
-                    }
+                    logger.Debug("Parsed dye: " + dye);
                 }
-                for (; index < player.Dyes.Length; index++)
-                {
-                    player.Dyes[index] = new Item();
-                }
-            }
-            else if (logger.IsDebugEnabled)
-            {
-                for (int index = 0; index < player.Dyes.Length; index++)
-                {
-                    player.Dyes[index] = new Item();
-                }
-                logger.Debug("Did not parse dyes because they are not enabled in release '" + release + "'.");
             }
         }
 
@@ -232,27 +192,23 @@ namespace TEdit.Data.IO
             Item item = new Item();
             item.Id = reader.ReadInt32();
             item.StackSize = 1;
-            item.Prefix = (int)reader.ReadByte();
+            item.Prefix = reader.ReadByte();
             return item;
         }
 
         private static void ParseArmor(Player player, BinaryReader reader)
         {
-            int size = 11;
-            if (VersionUtils.Is16PieceArmorSupported(player.Release))
-            {
-                size = 16;
-            }
-            
+            int size = 16;
             for (int index = 0; index < size && index < player.Armor.Length; index++)
             {
                 Item item = new Item();
                 int id = reader.ReadInt32();
+                byte prefix = reader.ReadByte();
                 if (id < VersionUtils.MAX_ITEM_ID)
                 {
                     item.Id = id;
                     item.StackSize = 1;
-                    item.Prefix = (int)reader.ReadByte();
+                    item.Prefix = prefix;
                 }
                 player.Armor[index] = item;
                 if (logger.IsDebugEnabled)
@@ -436,18 +392,10 @@ namespace TEdit.Data.IO
         /// <param name="reader">The binary input stream we're parsing</param>
         private static void ParseHideVisual(Player player, BinaryReader reader)
         {
-            if (VersionUtils.IsHideVisualSupported(player.Release))
+            player.HideVisual = (BitsByte)reader.ReadByte();
+            if (logger.IsDebugEnabled)
             {
-                player.HideVisual = (BitsByte)reader.ReadByte();
-
-                if (logger.IsDebugEnabled)
-                {
-                    logger.Debug("Parsed HideVisual: " + player.HideVisual);
-                }
-            }
-            else if (logger.IsDebugEnabled)
-            {
-                logger.Debug("'HideVisual' is not supported in release version '" + player.Release + "'. Parsing skipped.");
+                logger.Debug("Parsed HideVisual: " + player.HideVisual);
             }
         }
 
@@ -458,18 +406,10 @@ namespace TEdit.Data.IO
         /// <param name="reader">The binary input stream we're parsing</param>
         private static void ParseHairDye(Player player, BinaryReader reader)
         {
-            if (VersionUtils.IsHairDyeSupported(player.Release))
+            player.HairDye = reader.ReadByte();
+            if (logger.IsDebugEnabled)
             {
-                player.HairDye = reader.ReadByte();
-
-                if (logger.IsDebugEnabled)
-                {
-                    logger.Debug("Parsed hair dye: " + player.HairDye);
-                }
-            }
-            else if (logger.IsDebugEnabled)
-            {
-                logger.Debug("Hair dye is not supported in this version of the PLR file: '" + player.Release + "'.");
+                logger.Debug("Parsed hair dye: " + player.HairDye);
             }
         }
 
@@ -495,7 +435,6 @@ namespace TEdit.Data.IO
         /// <param name="reader">The binary input stream we're parsing</param>
         private static void ParseDifficulty(Player player, BinaryReader reader)
         {
-            int release = player.Release;
             player.Difficulty = reader.ReadByte();
             if (logger.IsDebugEnabled)
             {

@@ -47,8 +47,15 @@ namespace TEdit.Data.IO
         {
             for (int index = 0; index < player.Buffs.Length; ++index)
             {
-                Int32 type = player.Buffs[index].Type;
-                Int32 time = player.Buffs[index].Time;
+                Buff buff = player.Buffs[index];
+                if (buff == null)
+                {
+                    buff = new Buff();
+                    buff.Type = 0;
+                    buff.Time = 0;
+                }
+                Int32 type = buff.Type;
+                Int32 time = buff.Time;
                 if (ShouldNotSaveBuff(type))
                 {
                     writer.Write(0);
@@ -81,6 +88,9 @@ namespace TEdit.Data.IO
                 if (player.Inventory.Length <= index)
                 {
                     inv = new Item();
+                    inv.Id = 0;
+                    inv.Prefix = (byte)0;
+                    inv.StackSize = 1;
                 }
                 else
                 {
@@ -97,8 +107,16 @@ namespace TEdit.Data.IO
             Item[][] banks = { player.Bank1, player.Bank2 };
             foreach (Item[] bank in banks)
             {
-                foreach (Item item in bank)
+                for (int i = 0; i < bank.Length; i++)
                 {
+                    Item item = bank[i];
+                    if (item == null)
+                    {
+                        item = new Item();
+                        item.Id = 0;
+                        item.StackSize = 1;
+                        item.Prefix = (byte)0;
+                    }
                     writer.Write(item.Id);
                     writer.Write(item.StackSize);
                     writer.Write(item.Prefix);
@@ -134,6 +152,8 @@ namespace TEdit.Data.IO
                 if (player.Dyes.Length <= index)
                 {
                     dye = new Item();
+                    dye.Id = 0;
+                    dye.Prefix = (byte)0;
                 }
                 else
                 {
@@ -152,6 +172,9 @@ namespace TEdit.Data.IO
                 if (player.Armor.Length <= index)
                 {
                     armor = new Item();
+                    armor.Id = 0;
+                    armor.Name = "";
+                    armor.Prefix = (byte)0;
                 }
                 else
                 {

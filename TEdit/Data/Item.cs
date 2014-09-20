@@ -10,7 +10,7 @@ namespace TEdit.Data
     /// Models an in-game Item. At this point it's only going to hold the properties we need
     /// for the Player editor, though we can conceivably implement an Item editor. (TODO)
     /// </summary>
-    class Item
+    public class Item
     {
         [System.ComponentModel.DefaultValue(0)]
         public Int32 StackSize { get; set; }
@@ -19,7 +19,7 @@ namespace TEdit.Data
         public Int32 Id { get; set; }
 
         [System.ComponentModel.DefaultValue(0)]
-        public int Prefix { get; set; }
+        public Byte Prefix { get; set; }
 
         [System.ComponentModel.DefaultValue("")]
         public string Name { get; set; }

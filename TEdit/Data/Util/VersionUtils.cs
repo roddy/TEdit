@@ -19,7 +19,9 @@ namespace TEdit.Data.Util
         /// Minimum supported release for this tool. This happens to be the release that introduced lookup-by-ID over
         /// lookup-by-name. Coincidence? Nope.
         /// </summary>
-        public const int MIN_SUPPORTED_RELEASE = 38;
+        //public const int MIN_SUPPORTED_RELEASE = 38;
+        /// Actually for now we're only supporting the current release.
+        public const int MIN_SUPPORTED_RELEASE = TERRARIA_CURRENT_RELEASE;
 
         /// <summary>
         /// Apparently there's a hard-limit for the maximum number of worlds (which we found by looking at the size
